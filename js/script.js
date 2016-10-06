@@ -1,7 +1,8 @@
 $( document ).ready(function() {
     console.log( "ready!" );
-    $("h2").after('<div class="student-search page-header"><input type="text" id="searchForm" placeholder="Search for students..."><button>Search</button></div>'); //insert search bar and button on page load.
+    $("h2").after('<div class="student-search page-header"><input type="text" id="searchForm" placeholder="Search for students..."><button id="searchButton">Search</button></div>'); //insert search bar and button on page load.
     launcher(); //run launcher function on page load.
+    buttonPress();
 });
 
 
@@ -102,32 +103,24 @@ function paginate() {
         //$($studentsToShow).show('li:nth-of-type(n+' + lower + '):nth-of-type(-n+' + upper + ')').css( "background-color", "green" ); //this does not work.
         //$( $studentsToShow ).children('li:nth-of-type(n+' + lower + '):nth-of-type(-n+' + upper + ')').show().css( "background-color", "red" ); //this does not work and breaks the search function in the process.
             //this could be due to more selector errors.
-        $( "ul.student-list" ).children( "li" ).hide();
+        $( "ul.student-list" ).children( "li" ).fadeOut("fast");
 
-        $($studentsToShow).slice(lower - 1, upper).show();
+        $($studentsToShow).slice(lower - 1, upper).fadeIn("fast");
             //this makes the first 10 students green but keep all other students on display.
                 // Event if I place this above, $($allStudents).hide();, it has no effect and all students still show.
                 // This however will hide all students and make it work: $( "ul.student-list" ).children( "li" ).hide();
 
 //PLAY WITH IT LIKE IT IS FOR NOW TO MAKE IT WORK, THEN FIX SELECTOR ISSUES LATER.
     //have a go at pagination. Then when you get stuck, go to the community and then get on with your day.
-
+pagination2();
 }
 
 
-//Page turner
+function pagination2 () {
 $( "div.pagination" ).find( "a" ).on('click', function(){
-
     console.log("Page turner function has fired"); //to know that the function is firing on click.
-    
-});
-
-
-
-
-/* Remaining pagination code to adapt to this script
     $("a").removeClass("active"); //removes any "active" value from the list items
-    $(displayableStudents).hide(); //hide all the students
+    $( "ul.student-list" ).children( "li" ).fadeOut("fast"); //hide all the students
     $(this).addClass("active"); //make the clicked page "active"
 
     var index = $(".active").parent().index(); //The links are not siblings to each other but the parent li's are. So if you get the parent of the active link and then call .index() on the li it will give you the index of that li in relation to it's siblings.
@@ -140,10 +133,25 @@ $( "div.pagination" ).find( "a" ).on('click', function(){
     //$( "ul.student-list" ).children('li:nth-of-type(n+' + lower + '):nth-of-type(-n+' + upper + ')').show(); // old method
 
     // either...
-    $($studentsToShow).slice(lower - 1, upper).show();
+    $($studentsToShow).slice(lower - 1, upper).fadeIn("fast");
+
+
+});
+}
+
+//tomorrow morning get the search button sorted.
+
+//Hi @meysuhn I testet your code and have found the problem. You are adding the click event before the pagination before the div has been added to the DOM. I would suggest that you wrap the event up in a function, and fire the function after you have added the pagination div to the DOM. In this way it should work
+
+//document.getElementById('searchButton').addEventListener("click", buttonPress, false); //starts code off once button is clicked.
+
+function buttonPress () {
+$( "button.searchButton" ).find( "a" ).on('click', function(){
+console.log("Button has been pressed");
+});}
     //or use:
 
-
+/*
     if (pageNum=='0') {
         $($studentsToShow).slice(0, 10).show().css( "background-color", "blue" );
     } else if (pageNum=='1') {
