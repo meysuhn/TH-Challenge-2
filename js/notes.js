@@ -21,6 +21,12 @@ function launcher() {
      }
 }
 
+//TO CONSIDER:
+    //when user deleted search bar contents what happens as launcher isn't fired?
+    // In launcher, if $studentsToShow = $allStudents; then the script doesn't work.
+        //is rhis a problem with using different selectors throughout?
+        //is there another selctor issue below, with $( "ul.student-list" ).children( "li" ).hide(); ?
+
 /////////////////////////////////////////////////////////////////
 // Functions
 /////////////////////////////////////////////////////////////////
@@ -69,21 +75,44 @@ function pages() {
         var paginationDiv = '<div class="pagination"><ul>' + listItemsPag + '</ul></div>';
         $( "ul").after(paginationDiv); //inserts pagination html after the student list ul.
         //$($studentsToShow).show().css( "background-color", "green" ); //This moved down to paginate function.
-        paginate();
+        paginate(); //- let's see...
     }
 }
 
 function paginate() {
     $( "div.pagination" ).find( "a" ).first().addClass("active");
+
     var index = $(".active").parent().index(); //The links are not siblings to each other but the parent li's are. So if you get the parent of the active link and then call .index() on the li it will give you the index of that li in relation to it's siblings.
     console.log("Index is:" + " " +index);
+
     var upper = (index+1)*studentsPerPage; //this needs to be calculated before the lower value.
     var lower = upper - studentsPerPage + 1;
     console.log("Lower nth value:" + " " +lower);
     console.log("Upper nth value:" + " " +upper);
-    $( "ul.student-list" ).children( "li" ).fadeOut("fast");
-    $($studentsToShow).slice(lower - 1, upper).fadeIn("fast");
-    pagination2();
+
+// WHEN 'HIDE' RUNS IN THE SEARCH FUNCTION IT IS DOING SO WITH THIS SELECTOR: "ul.student-list"
+
+
+    //here is where a show conflict may come in.
+    //$( "ul.student-list" ).children('li:nth-of-type(n+' + lower + '):nth-of-type(-n+' + upper + ')').show();
+        //above is from pag function
+    //$($studentsToShow).show().css( "background-color", "green" );
+        //above is pages function in this script that worked fine to display ALL the required results. Currently commented out above.
+
+    //experiments
+        //$($studentsToShow).show('li:nth-of-type(n+' + lower + '):nth-of-type(-n+' + upper + ')').css( "background-color", "green" ); //this does not work.
+        //$( $studentsToShow ).children('li:nth-of-type(n+' + lower + '):nth-of-type(-n+' + upper + ')').show().css( "background-color", "red" ); //this does not work and breaks the search function in the process.
+            //this could be due to more selector errors.
+        $( "ul.student-list" ).children( "li" ).fadeOut("fast");
+
+        $($studentsToShow).slice(lower - 1, upper).fadeIn("fast");
+            //this makes the first 10 students green but keep all other students on display.
+                // Event if I place this above, $($allStudents).hide();, it has no effect and all students still show.
+                // This however will hide all students and make it work: $( "ul.student-list" ).children( "li" ).hide();
+
+//PLAY WITH IT LIKE IT IS FOR NOW TO MAKE IT WORK, THEN FIX SELECTOR ISSUES LATER.
+    //have a go at pagination. Then when you get stuck, go to the community and then get on with your day.
+pagination2();
 }
 
 
@@ -96,12 +125,27 @@ $( "div.pagination" ).find( "a" ).on('click', function(){
 
     var index = $(".active").parent().index(); //The links are not siblings to each other but the parent li's are. So if you get the parent of the active link and then call .index() on the li it will give you the index of that li in relation to it's siblings.
 
+
+    //$(displayableStudents).hide();
+
     var upper = (index+1)*studentsPerPage;
     var lower = upper - studentsPerPage + 1;
+    //$( "ul.student-list" ).children('li:nth-of-type(n+' + lower + '):nth-of-type(-n+' + upper + ')').show(); // old method
 
+    // either...
     $($studentsToShow).slice(lower - 1, upper).fadeIn("fast");
+
+
 });
 }
+
+//tomorrow morning get the search button sorted.
+
+//Hi @meysuhn I testet your code and have found the problem. You are adding the click event before the pagination before the div has been added to the DOM. I would suggest that you wrap the event up in a function, and fire the function after you have added the pagination div to the DOM. In this way it should work
+
+//document.getElementById('searchButton').addEventListener("click", buttonPress, false); //starts code off once button is clicked.
+
+
 
 function buttonPress () {
 $( "div.student-search page-header" ).find( "button" ).on('click', function(){
@@ -109,3 +153,22 @@ $( "div.student-search page-header" ).find( "button" ).on('click', function(){
 
 });
 }
+
+
+    //or use:
+
+/*
+    if (pageNum=='0') {
+        $($studentsToShow).slice(0, 10).show().css( "background-color", "blue" );
+    } else if (pageNum=='1') {
+        $($studentsToShow).slice(11, 20).show().css( "background-color", "green" );
+    } else if (pageNum=='2') {
+        $($studentsToShow).slice(21, 30).show().css( "background-color", "red" );
+    } else if (pageNum=='3') {
+        $($studentsToShow).slice(31, 40).show().css( "background-color", "orange" );
+    } else if (pageNum=='4') {
+        $($studentsToShow).slice(41, 50).show().css( "background-color", "pink" );
+    } else if (pageNum=='5') {
+        $($studentsToShow).slice(51, 60).show().css( "background-color", "purple" );
+    }
+    */
