@@ -1,235 +1,160 @@
-
-
-var listItemsPag = ''; //holds the list items inserted for pagination
-var displayableStudents = $( "ul.student-list" ).children( "li" ).css( "background-color", "blue" );
-//this variable to hold the students that either a) match the search criteria or b) all the students (if no search created)
-// later this may need to be converted to a function, once search is incorporated.
-var numberOfPages = ''; //this isn't neccessary just yet, here only for experimenting on final pagination
-var studentsPerPage = 10; //number of students per page
-
-
-
-$( document ).ready(function() {
-    $( "ul.student-list" ).children( "li" ).hide(); //on page load all elements are hidden.
-    pagination1(); //pagination1 is executed.
-    //pagination2();
-});
-
-//need to start with a function that runs on page load, assesses how many LIs there are and executes.
-
-
-
-//Need to move function around so that onload the pagination thing runs. On click should then execute that same function.  split into 2?
-
-//onload it is loading everything, but then hiding things as soon as I click on a number.
-    //because they're part of the html so of course they're going to load!
-    //you're only saying to hide them once you click something.
-
-
-//calculates number of pages/LIs required. Creates LIs.
-function pagination1() {
-    console.log( "pagination!" );
-      // var studentsPerPage = 10; //this taken out to be replaced with global variable for second function.
-      var $arrayLength = displayableStudents.length; //number students in selection
-      var numberOfPages = Math.floor($arrayLength/studentsPerPage); //calc no. of pages required
-
-      console.log(numberOfPages);
-
-      for (var i =1; i<=numberOfPages; i+=1) {
-          listItemsPag += '<li>'+'<a href="#">'+i+'</a>'+'</li>';
-          console.log(listItemsPag);
-      }
-
-      var paginationDiv = '<div class="pagination"><ul>' + listItemsPag + '</ul></div>';
-      $( "ul").after(paginationDiv); //inserts pagination html after the student list ul.
-
-      $( "div.pagination" ).find( "a" ).on('click', function(){
-          $("a").removeClass("active"); //removes any "active" value from the LIs
-          $( "ul.student-list" ).children( "li" ).hide(); //hide all the students
-          $(this).addClass("active"); //make the clicked page "active"
-
-          var index = $(".active").parent().index(); /*The links are not siblings to each other but the parent li's are. So if you get the parent of the active link and then call .index() on the li it will give you the index of that li in relation to it's siblings.*/
-          console.log(index);
-          $( "ul.student-list" ).children( "li" ).hide();
-
-          var nthStart = ((index+1)*studentsPerPage)-(studentsPerPage-1);
-          var nthEnd = (index+1)*studentsPerPage;
-          console.log(nthStart);
-          console.log(nthEnd);
-          //$( "ul.student-list" ).children('li:nth-of-type(nthStartn):nth-of-type(nthEnd-n)').show();
-          //FYI I don't think 'nth of type' accepts equations.
-
-          /*
-          $( "ul.student-list" ).children('li:nth-of-type(n+(index+1)*studentsPerPage)-(studentsPerPage-1)):nth-of-type(n+(index+1)*studentsPerPage)').show();
-          */
-          //$( "ul.student-list" ).children('li:nth-of-type(n+10):nth-of-type(-n+20)').show();
-
-          // I want to write the below in a better way to make it not brittle
-          if (index=='0') {
-              $( "ul.student-list" ).children('li:nth-of-type(n+0):nth-of-type(-n+10)').show();
-          } else if (index=='1') {
-              $( "ul.student-list" ).children('li:nth-of-type(n+11):nth-of-type(-n+20)').show();
-          } else if (index=='2') {
-                  $( "ul.student-list" ).children('li:nth-of-type(n+21):nth-of-type(-n+30)').show();
-          } else if (index=='3') {
-              $( "ul.student-list" ).children('li:nth-of-type(n+31):nth-of-type(-n+40)').show();
-          } else if (index=='4') {
-              $( "ul.student-list" ).children('li:nth-of-type(n+41):nth-of-type(-n+50)').show();
-          } else if (index=='5') {
-              $( "ul.student-list" ).children('li:nth-of-type(n+51):nth-of-type(-n+60)').show();
-          }
-
-}
-      //pagination2();
-);}
-
-//this function tests to see if any students match the search criteria. Before any search is implemented the first page is set as active.
-/*
-function pagination2() {
-    $( "div.pagination" ).find( "a" ).on('click', function(){
-        $("a").removeClass("active"); //removes any "active" value from the LIs
-        $( "ul.student-list" ).children( "li" ).hide(); //hide all the students
-        $(this).addClass("active"); //make the clicked page "active"
-
-        var index = $(".active").parent().index(); /*The links are not siblings to each other but the parent li's are. So if you get the parent of the active link and then call .index() on the li it will give you the index of that li in relation to it's siblings.*/
-        /*
-        console.log(index);
-        $( "ul.student-list" ).children( "li" ).hide();
-
-        var nthStart = ((index+1)*studentsPerPage)-(studentsPerPage-1);
-        var nthEnd = (index+1)*studentsPerPage;
-        console.log(nthStart);
-        console.log(nthEnd);
-        //$( "ul.student-list" ).children('li:nth-of-type(nthStartn):nth-of-type(nthEnd-n)').show();
-        //FYI I don't think 'nth of type' accepts equations.
-
-        /*
-        $( "ul.student-list" ).children('li:nth-of-type(n+(index+1)*studentsPerPage)-(studentsPerPage-1)):nth-of-type(n+(index+1)*studentsPerPage)').show();
-        */
-        //$( "ul.student-list" ).children('li:nth-of-type(n+10):nth-of-type(-n+20)').show();
-/*
-        // I want to write the below in a better way to make it not brittle
-        if (index=='0') {
-            $( "ul.student-list" ).children('li:nth-of-type(n+0):nth-of-type(-n+10)').show();
-        } else if (index=='1') {
-            $( "ul.student-list" ).children('li:nth-of-type(n+11):nth-of-type(-n+20)').show();
-        } else if (index=='2') {
-                $( "ul.student-list" ).children('li:nth-of-type(n+21):nth-of-type(-n+30)').show();
-        } else if (index=='3') {
-            $( "ul.student-list" ).children('li:nth-of-type(n+31):nth-of-type(-n+40)').show();
-        } else if (index=='4') {
-            $( "ul.student-list" ).children('li:nth-of-type(n+41):nth-of-type(-n+50)').show();
-        } else if (index=='5') {
-            $( "ul.student-list" ).children('li:nth-of-type(n+51):nth-of-type(-n+60)').show();
-        }
-        /*
-        //Does it matter that I've not done it exactly like this:
-
-        .student-item.cf:nth-of-type(n+11) {
-            display: none;
-        }
-
-    }
-);}
-
-//    $( "div.pagination" ).find( "a" ).on('click', function(){
-*/
-
-
-
-///////////////////////////////////////////////////////////////////
-//SEARCH function
-///////////////////////////////////////////////////////////////////
-
-/*
-$(document).ready(function(){
-    if (displayableStudents === 0) {
-        $( "ul.student-list" ).children( "li" ).hide();
-        $("ul.student-list" ).after('<p>Sorry, there are no students that match your search</p>');
-        //the above is totally experimental. See if works later.
-            //requires displayableStudents to be used as part of search function.
-    }
-    else {
-    $( "div.pagination" ).find( "a" ).eq(0).addClass("active"); //sets the first page to 'active' on load
-    }
-}
-);
-*/
-
-
-
-
-// inserts search box on page load.
 $( document ).ready(function() {
     console.log( "ready!" );
-$("h2").after('<div class="student-search page-header"><input placeholder="Search for students..."><button>Search</button></div>');
+    $("h2").after('<div class="student-search page-header"><input type="text" id="searchForm" placeholder="Search for students..."><button>Search</button></div>'); //insert search bar and button on page load.
+    launcher(); //run launcher function on page load.
 });
 
 
-/* Here is how the students are set up in HTML:
-<ul class="student-list">
-    <li class="student-item cf">
-        <div class="student-details">
-            <img class="avatar" src="https://randomuser.me/api/portraits/thumb/women/67.jpg">
-            <h3>iboya vat</h3> //Name is insude h3 element.
-            <span class="email">iboya.vat@example.com</span> //email address.
-        </div>
-        <div class="joined-details">
-               <span class="date">Joined 07/15/15</span>
-       </div>
-    </li>
-</ul>
-*/
+/////////////////////////////////////////////////////////////////
+// Variables
+/////////////////////////////////////////////////////////////////
+var $allStudents = $("student-list"); //stores the entire student list. A constant that is never altered.
+var $studentsToShow; // stores LIs that match search or $allStudents, depending on conditional executed.
+var studentsPerPage; //only needs to be global for pagination function to access it.
+
+function launcher() {
+     if(document.getElementById("searchForm").value ==='') {
+     //if search bar is empty (as it will be on page load and if content of search bar area deleted, set value of $studentsToShow to all students.
+         $studentsToShow = $( "ul.student-list" ).children( "li" ); //Sets value to all students, but not using the $allStudents variable, as for some reason this won't work?
+         pages();
+     }
+}
+
+//TO CONSIDER:
+    //when user deleted search bar contents what happens as launcher isn't fired?
+    // In launcher, if $studentsToShow = $allStudents; then the script doesn't work.
+        //is rhis a problem with using different selectors throughout?
+        //is there another selctor issue below, with $( "ul.student-list" ).children( "li" ).hide(); ?
+
+/////////////////////////////////////////////////////////////////
+// Functions
+/////////////////////////////////////////////////////////////////
+
+//Search Function
+$(function() {
+    var $textInput = $('input:text').change( function () {}).keyup( function () { //below is run when a change is detected in the search bar.
+    console.log("Search function has fired");
+
+   $(".pagination").detach(); //this removes any previous pagination div and li elements. Re-inserted as required below.
+   $(".message").detach(); //this remove the 'no matches' message if present. Re-inserted as required below.
+   $(this).change(); //'this' is referring to the whole input element and its classes.
+   console.log(this);
+
+   var $newText = $textInput.val().toLowerCase(); //stores search bar text. Any capitals converted to lower case.
+   console.log($newText);
+   $( "ul.student-list" ).children( "li" ).hide(); // hide all students.
+   $studentsToShow = $( "li" ).filter( ":contains('" + $newText + "')" ); //$studentsToShow contains only those that match the search text.
+   pages();
+});});
 
 
-// Function 2: Search - This may need to get broken down into more than one function. Think about it some more.
-//1. Capture the click event on the search bar.
-//$("select the search button here later").click(function(){
-    //1.1 find();
-        //Users should be able to search by name or e-mail address. And partial matches, like just a first name, should be displayed in the results.
+//All elements have been hidden as they arrive to this point.
+function pages() {
+    console.log("Pages function has fired");
+    var $arrayLength = $studentsToShow.length; //calc no. of students in the filtered results.
+    studentsPerPage = 10; //number of students per page. Global Var as used in more than one function.
+    var numberOfPages = Math.ceil($arrayLength/studentsPerPage); //calc no. of pages required. Needs to be .ceil as if were to use .floor you'd lose any LI's after the last ten from having rounded down.
+    console.log($arrayLength); //checking things are OK
+    console.log(numberOfPages); //checking things are OK
+
+    if ($arrayLength == '0') { //if array length is zero display message.
+        console.log("pages IF has fired...");
+        $("ul.student-list" ).after('<p class="message">No matches have been found. Please try another search. </p>');
 
 
-//});
+    } else { //where $studentsToShow contains students, create required number of pages
+        console.log("pages ELSE has fired...");
+
+        //listItemsPag = '<li>'+'<a href="#" class="active">'+1+'</a>'+'</li>'; //ADDING CLASS TO FIRST LI HERE. This seems a bit cheeky...
+        var listItemsPag =''; //if set up like this 'var listItemsPag;' undefined is returned. A curiosity to figure out later.
+        for (var i =1; i<=numberOfPages; i+=1) { //starts at 2 as already made page 1 above
+            listItemsPag += '<li>'+'<a href="#">'+i+'</a>'+'</li>';}
+            //console.log(listItemsPag);
+
+        var paginationDiv = '<div class="pagination"><ul>' + listItemsPag + '</ul></div>';
+        $( "ul").after(paginationDiv); //inserts pagination html after the student list ul.
+        //$($studentsToShow).show().css( "background-color", "green" ); //This moved down to paginate function.
+        paginate(); //- let's see...
+    }
+}
+
+function paginate() {
+    $( "div.pagination" ).find( "a" ).first().addClass("active");
+
+    var index = $(".active").parent().index(); //The links are not siblings to each other but the parent li's are. So if you get the parent of the active link and then call .index() on the li it will give you the index of that li in relation to it's siblings.
+    console.log("Index is:" + " " +index);
+
+    var upper = (index+1)*studentsPerPage; //this needs to be calculated before the lower value.
+    var lower = upper - studentsPerPage + 1;
+    console.log("Lower nth value:" + " " +lower);
+    console.log("Upper nth value:" + " " +upper);
+
+// WHEN 'HIDE' RUNS IN THE SEARCH FUNCTION IT IS DOING SO WITH THIS SELECTOR: "ul.student-list"
+
+
+    //here is where a show conflict may come in.
+    //$( "ul.student-list" ).children('li:nth-of-type(n+' + lower + '):nth-of-type(-n+' + upper + ')').show();
+        //above is from pag function
+    //$($studentsToShow).show().css( "background-color", "green" );
+        //above is pages function in this script that worked fine to display ALL the required results. Currently commented out above.
+
+    //experiments
+        //$($studentsToShow).show('li:nth-of-type(n+' + lower + '):nth-of-type(-n+' + upper + ')').css( "background-color", "green" ); //this does not work.
+        //$( $studentsToShow ).children('li:nth-of-type(n+' + lower + '):nth-of-type(-n+' + upper + ')').show().css( "background-color", "red" ); //this does not work and breaks the search function in the process.
+            //this could be due to more selector errors.
+        $( "ul.student-list" ).children( "li" ).hide();
+
+        $($studentsToShow).slice(lower - 1, upper).show();
+            //this makes the first 10 students green but keep all other students on display.
+                // Event if I place this above, $($allStudents).hide();, it has no effect and all students still show.
+                // This however will hide all students and make it work: $( "ul.student-list" ).children( "li" ).hide();
+
+//PLAY WITH IT LIKE IT IS FOR NOW TO MAKE IT WORK, THEN FIX SELECTOR ISSUES LATER.
+    //have a go at pagination. Then when you get stuck, go to the community and then get on with your day.
+
+}
+
+
+//Page turner
+$( "div.pagination" ).find( "a" ).on('click', function(){
+
+    console.log("Page click function has fired"); //to know that the function is firing on click.
+    //$(displayableStudents).hide();
+});
 
 
 
-//Thoughts
-    //Essentially, a scan of the number of li items in the student ul is first going to take place, and depending on how many results there are the number of 'pages' required in the HTML is going to be different.
 
-    //the page will load, onload will fire the pagination function
-        //the pagination function scans the HTML document...
-            //the function is set up to analyse the total number of li and divide by 10, displays the li items 10 per page
-        //the user then begins to interact with the search area
-            //a function then needs to take the user input and search through the list items
-            //maybe their is a separate function that handles the search query
-                //the results of the search query are then fed to the pagination function (parameter/argument) and the pagination function does it's thing of displaying these LIs 10 per page
-                //using an else/if (if there are search results, give to pagination, else if there are no search results then display an HTML message to the user)
+/* Remaining pagination code to adapt to this script
+    $("a").removeClass("active"); //removes any "active" value from the list items
+    $(displayableStudents).hide(); //hide all the students
+    $(this).addClass("active"); //make the clicked page "active"
+
+    var index = $(".active").parent().index(); //The links are not siblings to each other but the parent li's are. So if you get the parent of the active link and then call .index() on the li it will give you the index of that li in relation to it's siblings.
 
 
-//////////////////////////////////
-//Wiring
-//////////////////////////////////
+    //$(displayableStudents).hide();
 
-//onload
-//$(document).ready(handler).append(); //handler to be replaced with the function name once code is written, the pagination function, for example.
+    var upper = (index+1)*studentsPerPage;
+    var lower = upper - studentsPerPage + 1;
+    //$( "ul.student-list" ).children('li:nth-of-type(n+' + lower + '):nth-of-type(-n+' + upper + ')').show(); // old method
 
-//$(document).append('<div class="student search"><input placeholder="Search for students..."><button>Search</button></div>');
-
-//$(document).ready('<div class="student search"><input placeholder="Search for students..."><button>Search</button></div>').insertAfter(".header");
-    //one of the above hopefulolds the answer. Need to play around with it later.
-    //the above code hopefully, once the document loads, throws in the search function. So if the browswer has js activated, this wil just run. If js not activited, the html will look normal.
-    // to run pagination function in order to just display 10
-        //as the js file is placed at the botom of the HTML body, the DOM wil automatically 'ready' itself before firing off any Javascript, so technically .ready isn't strinctly necessary.
-        //ready handler used when the js file is included further up the html file, e.g. in he head. Using .ready in that scenario ensures the javascript/jQuery only first once the full dom tree has loaded and is 'ready'
-        //see https://teamtreehouse.com/library/jquery-basics/introduction-to-jquery/-ways-to-include-jquery-in-a-project
+    // either...
+    $($studentsToShow).slice(lower - 1, upper).show();
+    //or use:
 
 
-
-
-
-
-//event listener required for search button
-    //this should fire a function, search perhaps?
-    //Add an event listener to the search button. When the user clicks on the button it should use the text in the search input to filter the results.
-    //Searching should be case insensitive. e.g. a search for “Susan” should return results for “susan” and “Susan".
-    //do they want me to use jQuery for this? e.g. https://teamtreehouse.com/instructions/jquery-javascript-and-the-dom-2
+    if (pageNum=='0') {
+        $($studentsToShow).slice(0, 10).show().css( "background-color", "blue" );
+    } else if (pageNum=='1') {
+        $($studentsToShow).slice(11, 20).show().css( "background-color", "green" );
+    } else if (pageNum=='2') {
+        $($studentsToShow).slice(21, 30).show().css( "background-color", "red" );
+    } else if (pageNum=='3') {
+        $($studentsToShow).slice(31, 40).show().css( "background-color", "orange" );
+    } else if (pageNum=='4') {
+        $($studentsToShow).slice(41, 50).show().css( "background-color", "pink" );
+    } else if (pageNum=='5') {
+        $($studentsToShow).slice(51, 60).show().css( "background-color", "purple" );
+    }
+    */
