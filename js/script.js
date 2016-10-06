@@ -119,7 +119,7 @@ function paginate() {
 $( "div.pagination" ).find( "a" ).on('click', function(){
 
     console.log("Page turner function has fired"); //to know that the function is firing on click.
-    //$(displayableStudents).hide();
+    
 });
 
 
