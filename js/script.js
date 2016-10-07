@@ -81,8 +81,8 @@ function paginate() {
     var lower = upper - studentsPerPage + 1;
     console.log("Lower nth value:" + " " +lower);
     console.log("Upper nth value:" + " " +upper);
-    $( "ul.student-list" ).children( "li" ).fadeOut("fast");
-    $($studentsToShow).slice(lower - 1, upper).fadeIn("fast");
+    $( "ul.student-list" ).children( "li" ).hide();
+    $($studentsToShow).slice(lower - 1, upper).show();
     pagination2();
 }
 
@@ -91,7 +91,7 @@ function pagination2 () {
 $( "div.pagination" ).find( "a" ).on('click', function(){
     console.log("Page turner function has fired"); //to know that the function is firing on click.
     $("a").removeClass("active"); //removes any "active" value from the list items
-    $( "ul.student-list" ).children( "li" ).fadeOut("fast"); //hide all the students
+    $( "ul.student-list" ).children( "li" ).slideUp(); //hide all the students
     $(this).addClass("active"); //make the clicked page "active"
 
     var index = $(".active").parent().index(); //The links are not siblings to each other but the parent li's are. So if you get the parent of the active link and then call .index() on the li it will give you the index of that li in relation to it's siblings.
@@ -99,12 +99,12 @@ $( "div.pagination" ).find( "a" ).on('click', function(){
     var upper = (index+1)*studentsPerPage;
     var lower = upper - studentsPerPage + 1;
 
-    $($studentsToShow).slice(lower - 1, upper).fadeIn("fast");
+    $($studentsToShow).slice(lower - 1, upper).slideDown();
 });
 }
 
 function buttonPress () {
-$( "div.student-search page-header" ).find( "button" ).on('click', function(){
+$( "div.student-search" ).find( "button" ).on('click', function(){
     console.log("Button has been pressed");
 
 });
