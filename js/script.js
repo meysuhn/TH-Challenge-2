@@ -62,7 +62,14 @@ function pages() {
         $("ul.student-list" ).after('<p class="message">No matches have been found. Please try another search. </p>'); //inserting message for user
 
 
-    } else { //where $studentsToShow contains students, create required number of pages
+    } else if ($arrayLength <= '10') { //if array length (search results) is less than or equal to 10 there are no pagination links.
+        console.log("pages ELSE IF has fired. Number of students is less than 10");
+        $($studentsToShow).show();
+    }
+
+
+
+    else { //where $studentsToShow contains students, create required number of pages
         console.log("pages ELSE has fired...");
         var listItemsPag =''; //holding variable for 'for' loop
         for (var i =1; i<=numberOfPages; i+=1) {
