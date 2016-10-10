@@ -13,7 +13,7 @@ $( document ).ready(function() {
 /////////////////////////////////////////////////////////////////
 // Variables
 /////////////////////////////////////////////////////////////////
-var $allStudents = $("student-list"); //stores the entire student list. A constant that is never altered.
+
 var $studentsToShow; // stores LIs that match search or $allStudents, depending on conditional executed.
 var studentsPerPage; //only needs to be global for pagination function to access it.
 
