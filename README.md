@@ -1,3 +1,9 @@
-# TH-Challenge-2
-TH 2nd challenge
-Has this pushed?
+# Random Quote Generator
+## FullStack Tech Degree Project 2
+
+### Javascript, HTML5, CSS3
+
+
+
+### By Chris Mason
+
